@@ -76,6 +76,78 @@
 				</section>
 				<section>
 					<p style="font-size:2rem; text-align: start;">2. Création d’un éditeur de script</p>
+					<img src="img/script_editor.png">
+					<aside class="notes">
+						decoupage 3 composants
+					</aside>
+				</section>
+				<section>
+					<pre><code><script type="text/template">
+						<draggable
+							v-model="script"
+          		tag="tbody"
+						>
+							<tr
+							v-for="(action, index) in script"
+							:key="action._id"
+							data-test="tr-write-script-list"
+							>
+								<!-- SCRIPT EDITOR  -->
+								<td scope="row">
+									{{ index+1 }}
+								</td>
+								<td>
+									<v-select
+									data-test="select-scene-script-action-type"
+											:value="script[index].type"
+											:items="actionsOption"
+											@input="editActionType($event, action._id)"
+									></v-select>
+								</td>
+								<td
+								v-if="script[index].type === $t('dialogue') || script[index].type === $t('animation')"
+								class="text-center"
+								>
+									<v-select
+										v-show="assets.length>0"
+										data-test="select-scene-script-character"
+										:value="script[index].actionData.assetId"
+										:items="assets"
+										item-text="name"
+										item-value="_id"
+										@input="editAssetId($event, action._id)"
+										></v-select>
+									<AssetEditorButton
+									v-if="assets.length <= 0"
+									data-test="button-create-asset-script-tr"
+									/>
+								</td>
+								<td v-else></td>
+								<td>
+									<v-textarea
+									data-test="textarea-scene-script-description"
+									:value="script[index].actionData.description"
+									auto-grow
+									cols="100"
+									rows="1"
+									@input="editScriptDescription($event, action._id)"
+									></v-textarea>
+								</td>
+								<td>
+									<v-btn
+										data-test="button-scene-script-delete"
+										icon
+										@click="deleteScriptEditor(action._id)"
+										>
+										<v-icon color="grey lighten-1">
+											mdi-delete
+										</v-icon>
+									</v-btn>
+								</td>
+							<!-- /SCRIPT EDITOR  -->
+							</tr>
+        		</draggable>
+					</script></code></pre>
 					<aside class="notes">
 						decoupage 3 composants
 					</aside>
@@ -83,7 +155,7 @@
 			</div>
 		</div>
 
-		<script src="dist/reveal.js"></script>
+<script src="dist/reveal.js"></script>
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
