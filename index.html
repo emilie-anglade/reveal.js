@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Présentation - Emilie Anglade</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -68,6 +68,44 @@
 					</aside>
 				</section>
 				<section>
+					<table>
+						<thead>
+							<tr>
+								<th align="center">R&D</th>
+								<th align="center">V.0</th>
+								<th align="center">MVP</th>
+							</tr>
+						</thead>
+						<tbody style="font-size:xx-large;">
+							<tr>
+								<td>structuration des données et des objets</td>
+								<td>structuration du code</td>
+								<td>refonte de l'expérience utilisateur</td>
+							</tr>
+							<tr>
+								<td>modélisation du produit</td>
+								<td>gestion de la mémoire</td>
+								<td>génération d’une présentation dynamique</td>
+							</tr>
+							<tr>
+								<td>recherche de librairies</td>
+								<td>mise en place d’un système de state management</td>
+								<td>génération d'un PDF exportable</td>
+							</tr>
+						</tbody>
+					</table>
+					<aside class="notes">
+						R&D: Vue.js Konva.js
+						V0: Vuex
+						MVP: rédaction documentation avec l’équipe marketing,
+						utilisation du framework reveal.js,
+						jspdf 
+						
+						
+
+					</aside>
+				</section>
+				<section>
 					<p style="font-size:2rem; text-align: start;">1. Création d’un conteneur de scènes permettant d’enregistrer les propriétés de la scène et son script</p>
 					<img src="img/scene-editor.png">
 					<aside class="notes">
@@ -82,71 +120,63 @@
 					</aside>
 				</section>
 				<section>
-					<pre><code><script type="text/template">
+					<pre><code class="hljs" data-trim data-line-numbers="1-4|5-9|"><script type="text/template">
 						<draggable
 							v-model="script"
-          		tag="tbody"
+							tag="tbody"
 						>
 							<tr
-							v-for="(action, index) in script"
-							:key="action._id"
-							data-test="tr-write-script-list"
+								v-for="(action, index) in script"
+								:key="action._id"
 							>
-								<!-- SCRIPT EDITOR  -->
-								<td scope="row">
+								<td>
 									{{ index+1 }}
 								</td>
 								<td>
 									<v-select
-									data-test="select-scene-script-action-type"
-											:value="script[index].type"
-											:items="actionsOption"
-											@input="editActionType($event, action._id)"
+										:value="script[index].type"
+										:items="actionsOption"
+										@input="editActionType($event, action._id)"
 									></v-select>
 								</td>
 								<td
-								v-if="script[index].type === $t('dialogue') || script[index].type === $t('animation')"
-								class="text-center"
+									v-if="script[index].type === $t('dialogue') || script[index].type === $t('animation')"
+									class="text-center"
 								>
 									<v-select
 										v-show="assets.length>0"
-										data-test="select-scene-script-character"
 										:value="script[index].actionData.assetId"
 										:items="assets"
 										item-text="name"
 										item-value="_id"
 										@input="editAssetId($event, action._id)"
-										></v-select>
+									></v-select>
 									<AssetEditorButton
-									v-if="assets.length <= 0"
-									data-test="button-create-asset-script-tr"
+										v-if="assets.length <= 0"
 									/>
 								</td>
 								<td v-else></td>
 								<td>
 									<v-textarea
-									data-test="textarea-scene-script-description"
-									:value="script[index].actionData.description"
-									auto-grow
-									cols="100"
-									rows="1"
-									@input="editScriptDescription($event, action._id)"
+										:value="script[index].actionData.description"
+										auto-grow
+										cols="100"
+										rows="1"
+										@input="editScriptDescription($event, action._id)"
 									></v-textarea>
 								</td>
 								<td>
 									<v-btn
-										data-test="button-scene-script-delete"
 										icon
 										@click="deleteScriptEditor(action._id)"
-										>
+									>
 										<v-icon color="grey lighten-1">
 											mdi-delete
 										</v-icon>
 									</v-btn>
 								</td>
-							<!-- /SCRIPT EDITOR  -->
 							</tr>
-        		</draggable>
+						</draggable>
 					</script></code></pre>
 					<aside class="notes">
 						decoupage 3 composants
