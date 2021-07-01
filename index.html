@@ -100,87 +100,564 @@
 						MVP: rédaction documentation avec l’équipe marketing,
 						utilisation du framework reveal.js,
 						jspdf 
-						
-						
-
 					</aside>
 				</section>
 				<section>
-					<p style="font-size:2rem; text-align: start;">1. Création d’un conteneur de scènes permettant d’enregistrer les propriétés de la scène et son script</p>
+					<h3 style="color: #ac109f">Mes réalisations</h3>
+				</section>
+				<section>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">1. Création d’un conteneur de scènes permettant d’enregistrer les propriétés de la scène et son script</p>
 					<img src="img/scene-editor.png">
 					<aside class="notes">
 						decoupage 3 composants
 					</aside>
 				</section>
 				<section>
-					<p style="font-size:2rem; text-align: start;">2. Création d’un éditeur de script</p>
-					<img src="img/script_editor.png">
+					<pre>
+						<code class="hljs" data-trim data-line-numbers>
+							<script type="text/template">
+								<template>
+									<v-textarea
+										:value="sceneProperties.description"
+										:placeholder="$t('sceneDescriptionPlaceholder')"
+										rows="4"
+										@input="editSceneDescription"
+									/>
+								</template>
+								  
+								<script>
+								import { mapGetters } from 'vuex'
+
+								export default {
+									computed: {
+										...mapGetters({
+											sceneProperties: 'storyboard/getSceneToEditProperties'
+										})
+									},
+									methods: {
+										editSceneDescription (e) {
+										this.$store.dispatch('storyboard/editSceneDescription', e)
+										}
+									}
+								}
+								</script>
+							</script>
+						</code>
+					</pre>
 					<aside class="notes">
-						decoupage 3 composants
+						Les ‘value’ de chaque input sont bindées sur l’accesseur du store: ‘sceneProperties’.
+						La fonction mapGetters() permet d’attacher les accesseurs du  store aux propriétés calculées locales (computed): 
 					</aside>
 				</section>
 				<section>
-					<pre><code class="hljs" data-trim data-line-numbers="1-4|5-9|"><script type="text/template">
-						<draggable
-							v-model="script"
-							tag="tbody"
-						>
-							<tr
-								v-for="(action, index) in script"
-								:key="action._id"
-							>
-								<td>
-									{{ index+1 }}
-								</td>
-								<td>
-									<v-select
-										:value="script[index].type"
-										:items="actionsOption"
-										@input="editActionType($event, action._id)"
-									></v-select>
-								</td>
-								<td
-									v-if="script[index].type === $t('dialogue') || script[index].type === $t('animation')"
-									class="text-center"
-								>
-									<v-select
-										v-show="assets.length>0"
-										:value="script[index].actionData.assetId"
-										:items="assets"
-										item-text="name"
-										item-value="_id"
-										@input="editAssetId($event, action._id)"
-									></v-select>
-									<AssetEditorButton
-										v-if="assets.length <= 0"
-									/>
-								</td>
-								<td v-else></td>
-								<td>
-									<v-textarea
-										:value="script[index].actionData.description"
-										auto-grow
-										cols="100"
-										rows="1"
-										@input="editScriptDescription($event, action._id)"
-									></v-textarea>
-								</td>
-								<td>
-									<v-btn
-										icon
-										@click="deleteScriptEditor(action._id)"
-									>
-										<v-icon color="grey lighten-1">
-											mdi-delete
-										</v-icon>
-									</v-btn>
-								</td>
-							</tr>
-						</draggable>
-					</script></code></pre>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">2. Création d’un éditeur de script</p>
+					<img src="img/script_editor.png">
 					<aside class="notes">
-						decoupage 3 composants
+						pour chaque action: type, élément concerné, détail de l'action
+						clic: action ajoutée dans le script de la scène en cours
 					</aside>
+				</section>
+				<section>
+					<pre>
+						<code class="hljs" data-trim data-line-numbers="12-14| 32-41|3-10| 18, 21-30">
+							<script type="text/template">
+								<template>
+									<v-simple-table>
+										<draggable v-model="script" tag="tbody">
+											<tr
+												v-for="(action, index) in script"
+												:key="action._id"
+											>
+											<!-- SCRIPT EDITOR  -->
+											</tr>
+										</draggable>
+									</v-simple-table>
+										<v-btn @click="addScriptEditor">
+											<v-icon dark>mdi-plus</v-icon>
+										</v-btn>
+								</template>
+								  
+								<script>
+								import draggable from 'vuedraggable'
+
+								export default {
+									computed: {
+										script: {
+											get () {
+												return this.$store.getters['storyboard/getOrderedScriptList']
+											},
+											set (value) {
+												this.$store.dispatch('storyboard/updateScript', value)
+											}
+										}
+									},
+									methods: {
+										addScriptEditor () {
+											const scriptLength = this.script.length
+											let actionType
+											if (scriptLength > 0) {
+												actionType = this.script[scriptLength - 1].type
+											} else {
+												actionType = undefined
+											}
+											this.$store.dispatch('storyboard/addScriptEditor', actionType)
+										}
+									}
+								}
+								</script>
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						action addscript editor initialise un nouvel objet dans le store
+						fonction de drag-and-drop avec le composant ‘vuedraggable’ de la librairie Sortable.js.
+						Mutateur (set) au computed, ordre des scènes mis à jour dans le state à chaque déplacement: 
+
+					</aside>
+				</section>
+				<section>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">3. Export des données triées</p>
+					<img src="img/scene_summary.png">
+				</section>
+				<section>
+					<pre>
+						<code class="hljs" data-trim data-line-numbers="9-25 | 2-7 | 26-34 " data-noescape>
+							<script type="text/template">
+								<script>
+									computed: {
+										dialogueList () {
+										  return this.selectAction('dialogue')
+										},
+										...
+									}
+									methods: {
+										selectAction (actionType) {
+											const result = []
+		
+											const script = this.sceneToEdit.script
+		
+											const filteredActions = script.filter(action => action.type === actionType)
+											
+											filteredActions.forEach((item) => {
+												const assetObject = this.assets.find(i => i._id === item.actionData.assetId)
+												result.push({ 
+													asset: assetObject ? assetObject.name : undefined, 
+													description: item.actionData.description, 
+													actionType: item.type 
+												})
+											})
+											return result
+										},
+										onExport () {
+											const dialogWS = XLSX.utils.json_to_sheet(this.dialogueList)
+											...
+											const wb = XLSX.utils.book_new() // make Workbook of Excel
+											XLSX.utils.book_append_sheet(wb, dialogWS, 'dialogues') // dialogues is name of Worksheet
+											...
+											// export Excel file
+											XLSX.writeFile(wb, `${this.sceneToEdit.properties.title}.xlsx`) // name of the file is scene title
+										}
+									}
+								</script>
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						Le script doit être en premier lieu trié par type d’action, 
+						puis le nom de l’élément concerné dans chaque action doit être récupéré.
+						( Le nom et les images d’un élément créé par l’utilisateur sont stockés dans le tableau assets du storyboard,
+						 seul leur id est enregistré dans le script )
+
+						fonction selectAction: paramètre le type d’action.
+						Je récupère ensuite les éléments concernés par le type d’action avec la méthode filter(), 
+						puis je récupère dans le tableau des éléments: this.assets, le nom de l’élément utilisé dans le script, 
+						avec la méthode forEach().
+						+ Cette fonction est ensuite appliqué à chaque type d’action:
+						+ clic sur le bouton ‘Export Excel’, données json exportées dans un classeur Excel, grâce au package npm xlsx
+					</aside>
+				</section>
+				<section>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">4. Développement d’un outil permettant de créer une composition graphique</p>
+					<img src="img/konva.png">
+					<aside class="notes">
+						L’utilisateur a la possibilité de créer un visuel pour illustrer la scène.
+						L’outil doit lui permettre d’ajouter diverses formes graphiques (rectangle, cercle, flèche bulles…), des images et du texte. 
+						Puis de les déplacer, de modifier leur taille, leur inclinaison, leur couleur de remplissage, leur bordure, leur ordre d’apparition dans le plan et de les supprimer.
+						Pour développer cet outil j’ai utilisé ‘Vue Konva’: une librairie Javascript permettant de créer des canvas complexes en utilisant Vue.js. en liaison avec le framework Konva.
+					</aside>
+				</section>
+				<section>
+					<pre>
+						<code class="hljs" data-trim data-line-numbers="1-4 | 5 - 11 | 12-35" data-noescape>
+							<script type="text/template">
+								export const state = () => ({
+									shapesList: [],
+									...
+								})
+								export const getters = {
+									getNewOrder (state) {
+										return state.shapesList.length > 0 
+										? state.shapesList.map(e => e.order).reduce((a, b) => Math.max(a, b)) 
+										: 0
+									}
+								}
+								export const actions = {
+									addCircleShape ({ state, getters, commit }) {
+										const newOrder = getters.getNewOrder
+										const newId = ObjectID().toHexString()
+										const payload = { 
+											order: newOrder + 1, 
+											type: 'circle', 
+											config: { 
+												id: newId, 
+												name: `circle_${newId}`, 
+												x: 100, 
+												y: 100, 
+												radius: 50, 
+												rotation: 0, 
+												fill: #000000, 
+												shadowBlur: 0, 
+												stroke: '#000000', 
+												strokeWidth: 1, 
+												strokeScaleEnabled: false, 
+												draggable: true 
+											} }
+										commit('ADD_SHAPE', payload)
+									},
+								}
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						Un store est dédié à la gestion du canvas. 
+						Dans le state, un tableau nommé ‘shapesList’ stocke la configuration de chaque forme
+						 ajoutée au canvas ainsi que son ordre d’apparition.
+						L'ordre d'apparition de chaque scène ajoutée doit être superieur à l'ordre le plus haut de la liste des shapes 
+						 + fonction reduce  
+						 + Exemple d'ojet ajouté à shaoesLIst, si l’utilisateur ajoute un cercle: 
+
+					</aside>
+				</section>
+				<section>
+					<pre>
+						<code class="hljs" data-trim data-line-numbers="1-11 | 13-27">
+							<script type="text/template">
+								components/CanvasEditor.vue
+								<v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown">
+									<v-layer>
+										<VDraw
+											v-for="item in shapesList"
+											:key="item.config.name"
+											:item="item"
+										/>
+										<v-transformer ref="transformer" />
+									</v-layer>
+								</v-stage>
+								
+								components/VDraw.vue
+								<template>
+									...
+									<v-circle
+									  v-if="item.type === 'circle'"
+									  :config="{ ...item.config, item.id}"  />
+								</template>
+								<script>
+									props: {
+										item: {
+											type: Object
+										}
+									},
+									...
+								</script>
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						Une itération est faite sur cette liste dans un composant nommé V-draw permettant de restituer pour chaque forme la configuration attendue par Vue Konva dans le layer.
+					</aside>
+				</section>
+				<section>
+					<pre>
+						<code data-trim data-line-numbers>
+							<script type="text/template">
+								handleStageMouseDown (e) {
+									// clicked on stage - clear selection
+									if (e.target === e.target.getStage()) {
+										this.editText = false
+										this.editShapeColor = false
+										this.editSelectedShape(undefined)
+										this.updateTransformer()
+										return
+								  	}
+								  	// find clicked shape by its id
+									const { shapeId } = e.target.attrs
+									const shape = this.shapesList.find(s => s.config.id === shapeId)
+									if (shape) {
+										this.editSelectedShape({ shapeId, config: shape.config })
+										if (shape.type !== 'text' && shape.type !== 'image') {
+											this.editText = false
+											this.editShapeColor = true
+										} else if (shape.type === 'text') {
+											this.editShapeColor = false
+											this.editText = true
+										} else if (shape.type === 'image') {
+											this.editShapeColor = false
+											this.editText = false
+										}
+									} else {
+										this.editSelectedShape(undefined)
+									}
+									this.updateTransformer()
+								},
+
+								updateTransformer () {
+									// here we need to manually attach or detach Transformer node
+									const transformerNode = this.$refs.transformer.getNode()
+									const stage = transformerNode.getStage()
+									const selectedNode = stage.findOne('#' + this.selectedShape.shapeId)
+									if (selectedNode === transformerNode.node()) {
+										return  // do nothing if selected node is already attached
+									}
+									if (selectedNode) {    // attach to another node
+										transformerNode.nodes([selectedNode])
+									} else {    // remove transformer
+										transformerNode.nodes([])
+									}
+									transformerNode.getLayer().batchDraw()
+								}								
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						A chaque clic de l’utilisateur sur le stage, la fonction ‘handleStageMouseDown()’ est activée. 
+						Elle va vérifier si la cible du clic est le stage ou une shape. 
+						Si la cible du clic est le stage, le state local est alors réinitialisé.
+						Si la cible du clic est une shape: 
+						le transformer est déclenché et rattaché à la shape sélectionnée
+						le state local (data) est actualisé en fonction de son type. 
+						
+						Le composant CanvasToolbar /> reçoit en props deux éléments du state local: ‘editText’ et ‘editShapeColor’ pour lui permettre de s’actualiser en fonction de la shape sélectionnée 
+						(exemple: affichage du sélecteur de police d’écriture  uniquement si la shape est de type ‘text’ ou affichage du colorpicker pour choisir une couleur de remplissage uniquement si la shape est de type ‘rect’ ou ‘circle’). 
+
+					</aside>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Et maintenant ...</h3>
+				</section>
+				<section data-auto-animate>
+					<img src="img/logo_gris.png">
+					<aside class="notes">
+						prototype de l’application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
+						un accélérateur de croissance pour les startups et PME
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<img src="img/logo_gris.png">
+					<p>-> L'accélération de croissance : stratégie de développement, recherche d'investisseurs & levée de fonds, ...
+					</p>
+					<p class="fragment">-> L'ingénierie opérationnelle: mentoring de dirigeants,assistance à maîtrise d'ouvrage, ...
+					</p>
+					<aside class="notes">
+						Les services  proposés s’articulent autour de 2 grands axes :
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h4>Le projet : développer un un outil de rating/scoring</h4>
+					<aside class="notes">
+						a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h4 style="margin-bottom: 50px;">Le projet : développer un outil de rating/scoring</h4>
+					<ul>
+						<li>Permettre aux startups de s’autoévaluer puis d’éditer un executive summary à envoyer à des investisseurs</li>
+						<li class="fragment">Permettre aux investisseurs de pouvoir se décider sur un one pager et une notation
+						</li>
+						<li class="fragment">Le livrable pour la startup est un Scoring et un Executive Summary.
+						</li>
+					</ul>
+					<aside class="notes">
+						5 familles d'indicateurs / 9 questions par famille / 5 choix de réponses par question
+					</aside>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Mes réalisations</h3>
+				</section>
+				<section>
+					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Création de la base de données</p>
+					<img class="r-stretch" src="img/db100.png">
+					<aside class="notes">
+						Les données nécessaires à la création d’un scoring et d’un executive summary sont: 
+						2 questionnaires composés chacun de plusieurs questions,
+						Pour une question: un énoncé, un ordre d’apparition, une famille et un type: ouverte ou fermée avec un choix de réponses:
+						Pour une réponse:  un texte et une valeur (exemple: de 1 à 5 pour le scoring).
+
+						En ce qui concerne la startup, elle s’identifie avec un mail et un mot de passe.
+						Après avoir répondu aux deux questionnaires, elle doit pouvoir consulter les résultats de son scoring et générer un executive summary à partir de ses informations de profil. 
+						La base de données a été créée sur MySQL avec le logiciel MySQL Workbench.
+
+						La migration des données est gérée avec le framework db-migrate.
+					</aside>
+				</section>
+				<section>
+					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Poster les réponses d’un questionnaire dans la base de données</p>
+					<pre>
+						<code style="max-height: 600px;" data-trim data-line-numbers=" | 7-11 | 13-24" data-noescape>
+							const express = require("express");
+							const connection = require("../db");
+							const router = express.Router();
+							
+							router.post("/general", async (req, res) => {
+							try {
+								const { generalForm, startupId } = req.body;
+								const { activityArea } = req.body.generalForm;
+								const { startupPosition } = req.body.generalForm;
+								delete generalForm.activityArea;
+								delete generalForm.startupPosition;
+
+								const startupProfileQuery = `INSERT INTO startup_profile SET ? ON DUPLICATE KEY UPDATE ?`;
+								const generalFormValues = { ...generalForm, startup_id: startupId }
+								await connection.query(startupProfileQuery, [generalFormValues, generalFormValues]);
+							
+								const activityAreaQuery = `INSERT INTO activity_area SET ? ON DUPLICATE KEY UPDATE ?;`;
+								const activityAreaValues = { startup_id: startupId, ...activityArea };
+								await connection.query(activityAreaQuery, [activityAreaValues, activityAreaValues]);
+							
+								const positionQuery = `INSERT INTO position SET ? ON DUPLICATE KEY UPDATE ?;`;
+								const positionValues = { startup_id: startupId, ...startupPosition };
+								await connection.query(positionQuery, [positionValues, positionValues]);
+
+								res.sendStatus(200);
+							} catch (error) {
+								res.status(500).send(error);
+							}
+							});
+							module.exports = router;
+
+						</code>
+					</pre>
+					<aside class="notes">
+						Les réponses renvoyées par le questionnaire de profil sont stockées dans 3 tables différentes: startup_profile, position, activity_area.
+						Nous devons donc en premier lieu séparer les données reçues: 
+						+ Puis pour chaque table, envoyer les données correspondantes
+						La syntaxe INSERT INTO … SET est propre à MySQL et équivalente au standard SQL:  INSERT INTO … VALUES
+						L’instruction ON DUPLICATE KEY UPDATE est une fonctionnalité de MySQL qui permet de mettre à jour les données si un enregistrement existe déjà dans la table.
+					</aside>
+				</section>
+				<section>
+					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Récupérer le scoring d'une start-up</p>
+						<img width="500" src="img/rankscoring_scoring_result.png">
+						<img class="r-stretch" src="img/postman-get-scoring.PNG">
+					<aside class="notes">
+						Après avoir répondu au questionnaire, le résultat de chaque famille du scoring de la start-up est stocké dans la table scoring.
+					</aside>
+				</section>
+				<section>
+					<pre>
+						<code data-trim data-line-numbers data-noescape>
+							const express = require("express");
+							const connection = require("../db");
+							
+							const router = express.Router();
+							
+							router.get("/:idStartup/scoring", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [scoring] = await connection.query(
+									`SELECT * FROM scoring WHERE startup_id = ? ;`,
+									[idStartup]
+									);
+									res.status(200).json(scoring);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup profile");
+								}
+							});
+						</code>
+					</pre>
+				</section>
+				<section>
+					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up</p>
+					<pre>
+						<code style="max-height: 600px;" data-trim data-line-numbers data-noescape>
+							router.get("/:idStartup/profile", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [
+										profile,
+									] = await connection.query(
+										"SELECT * FROM startup_profile WHERE startup_id = ?;",
+										[idStartup]
+									);
+									res.status(200).json(profile);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup profile");
+								}
+							  });
+							   
+							  router.get("/:idStartup/activities", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [activities] = await connection.query(
+										`SELECT * FROM activity_area WHERE startup_id = ?;`,
+										[idStartup]
+									);
+									Object.keys(activities).forEach((key) => {
+										if (activities[key] === 0) {
+										delete activities[key];
+										}
+									});
+									delete activities.startup_id;
+									delete activities.id;
+									res.status(200).json(activities);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup activity");
+								}
+							  });
+							   
+							  router.get("/:idStartup/positions", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [positions] = await connection.query(
+										`SELECT * FROM position WHERE startup_id = ?;`,
+										[idStartup]
+									);
+									Object.keys(positions).forEach((key) => {
+										if (positions[key] === 0) {
+										delete positions[key];
+										}
+									});
+									res.status(200).json(positions);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup position");
+								}
+							  });
+							  
+						</code>
+					</pre>
+					<aside class="notes">
+						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables dans la base de données.
+	
+						 + L’id de la startup concernée est passée en paramètre de l’URL, ses informations de profil sont récupérées dans la table ‘startup_profile’
+	
+						+ Les tables ‘position’ et ‘activity_area’ contiennent tous les positionnements et secteurs d’activité possibles pour une startup. 
+						Chaque champ est associée à true ou false (0 ou 1 en SQL) selon si la startup a coché ou non la case dans le questionnaire (checkbox).
+	
+						+ Nous ne souhaitons pas renvoyer les champs dont la valeur est false (0), nous les supprimons donc si tel est le cas: 
+	
+					</aside>
+				</section>
+				<section>
+					<img src="img/postman-get-activities.PNG">
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Conclusion</h3>
+					<img src="img/logo_wcs.png" ><br>
+					<img style="margin: 30px;" width="350" src="img/logo-edtake.png">
+					<img style="margin: 30px;" width="400" src="img/logo_gris.png">
 				</section>
 			</div>
 		</div>

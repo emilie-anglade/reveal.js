@@ -91,7 +91,7 @@ export default {
 	touch: true,
 
 	// Loop the presentation
-	loop: false,
+	loop: true,
 
 	// Change the presentation direction to be RTL
 	rtl: false,
