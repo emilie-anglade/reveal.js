@@ -19,9 +19,266 @@
 				<section>
 					<h4>Titre professionnel développeuse web et web mobile</h4>
 					<p style="color: #ac109f">Emilie Anglade</p>
+				</section>
+				<section>
+					<img width="350" src="img/logo_gris.png"> <p>1. Développer la partie back-end d'une application web</p>
+					<img width="300" src="img/logo-edtake.png"> <p>2. Développer la partie front-end d'une application web</p>
+				</section>
+				<section data-auto-animate>
+					<img width="600" src="img/logo_gris.png">
 					<aside class="notes">
-						Presentation, reconversion professionnelle, formation wild code school projet final client, stage edtake
+						prototype de l’application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
+						un accélérateur de croissance pour les startups et PME
 					</aside>
+				</section>
+				<section data-auto-animate>
+					<img width="400" src="img/logo_gris.png">
+					<p style="text-align: left;">2 grands axes : </p>
+					<p style="text-align: left;">- L'accélération de croissance : stratégie de développement, recherche d'investisseurs & levée de fonds, ...
+					</p>
+					<p style="text-align: left;" class="fragment">- L'ingénierie opérationnelle: mentoring de dirigeants,assistance à maîtrise d'ouvrage, ...
+					</p>
+				</section>
+				<section data-auto-animate>
+					<h4>Le projet : développer un outil de rating/scoring</h4>
+					<aside class="notes">
+						a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h4 style="margin-bottom: 50px;">Le projet : développer un outil de rating/scoring</h4>
+					<ul>
+						<li>Permettre aux startups d'évaluer leur degré de maturité</li>
+						<li class="fragment">Le livrable pour la startup est un Scoring et un Executive Summary.
+						</li>
+						<li class="fragment">Permettre aux investisseurs de pouvoir se décider sur un one pager et une notation
+						</li>
+					</ul>
+					<aside class="notes">
+						2 questionnaires pour la start-up: général et scoring: 5 familles d'indicateurs / 9 questions par famille / 5 choix de réponses par question
+					</aside>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Outils utilisés</h3>
+					<img src="img/nodejs-new-pantone-black.svg" width="250">
+					<img src="img/mysql_workbench.jpg" width="250">
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Mes réalisations</h3>
+				</section>
+				<section>
+					<p style="color: #ac109f">Création de la base de données</p>
+					<ul>
+						<li>
+							<p style="font-size:2rem; text-align: start;">2 questionnaires: </p>
+							<ul>
+								<li>
+									<p style="font-size:2rem; text-align: start;">Question : texte, ordre d'apparition, famille, type</p>
+								</li>
+								<li>
+									<p style="font-size:2rem; text-align: start;">Réponse : texte, valeur</p>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<p style="font-size:2rem; text-align: start;">Start-up:</p>
+							<ul>
+								<li>
+									<p style="font-size:2rem; text-align: start;">Profil</p>
+								</li>
+								<li>
+									<p style="font-size:2rem; text-align: start;">Scoring</p>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<aside class="notes">
+						Données nécessaires création scoring executive summary : 
+						2 questionnaires composés chacun de plusieurs questions,
+						Pour une question: un énoncé, un ordre d’apparition, une famille et un type: ouverte ou fermée avec un choix de réponses:
+						Pour une réponse:  un texte et une valeur (exemple: de 1 à 5 pour le scoring).
+						En ce qui concerne la startup, elle s’identifie avec un mail et un mot de passe.
+						Après avoir répondu aux deux questionnaires, elle doit pouvoir consulter les résultats de son scoring et générer un executive summary à partir de ses informations de profil.
+					</aside>
+				</section>
+				<section>
+					<img class="r-stretch" src="img/db100.png">
+				</section>
+				<section>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">Poster les réponses du questionnaire 'Général' dans la base de données</p>
+					<pre>
+						<code style="max-height: 500px;" data-trim data-line-numbers="7-11 | 13-24" data-noescape>
+							const express = require("express");
+							const connection = require("../db");
+							const router = express.Router();
+							
+							router.post("/general", async (req, res) => {
+							try {
+								const { generalForm, startupId } = req.body;
+								const { activityArea } = req.body.generalForm;
+								const { startupPosition } = req.body.generalForm;
+								delete generalForm.activityArea;
+								delete generalForm.startupPosition;
+
+								const startupProfileQuery = `INSERT INTO startup_profile SET ? ON DUPLICATE KEY UPDATE ?`;
+								const generalFormValues = { ...generalForm, startup_id: startupId }
+								await connection.query(startupProfileQuery, [generalFormValues, generalFormValues]);
+							
+								const activityAreaQuery = `INSERT INTO activity_area SET ? ON DUPLICATE KEY UPDATE ?;`;
+								const activityAreaValues = { startup_id: startupId, ...activityArea };
+								await connection.query(activityAreaQuery, [activityAreaValues, activityAreaValues]);
+							
+								const positionQuery = `INSERT INTO position SET ? ON DUPLICATE KEY UPDATE ?;`;
+								const positionValues = { startup_id: startupId, ...startupPosition };
+								await connection.query(positionQuery, [positionValues, positionValues]);
+
+								res.sendStatus(200);
+							} catch (error) {
+								res.status(500).send(error);
+							}
+							});
+							module.exports = router;
+
+						</code>
+					</pre>
+					<aside class="notes">
+						Les réponses renvoyées par le questionnaire de profil sont stockées dans 3 tables différentes: startup_profile, position, activity_area.
+						Nous devons donc en premier lieu séparer les données reçues: 
+						+ Puis pour chaque table, envoyer les données correspondantes
+						La syntaxe INSERT INTO … SET est propre à MySQL et équivalente au standard SQL:  INSERT INTO … VALUES
+						L’instruction ON DUPLICATE KEY UPDATE est une fonctionnalité de MySQL qui permet de mettre à jour les données si un enregistrement existe déjà dans la table.
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer le scoring d'une start-up</p>
+						<img width="500" src="img/rankscoring_scoring_result.png">
+						<img class="r-stretch" src="img/postman-get-scoring.PNG">
+					<aside class="notes">
+						Après avoir répondu au questionnaire, le résultat de chaque famille du scoring de la start-up est stocké dans la table scoring.
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer le scoring d'une start-up</p>
+					<pre>
+						<code data-trim data-line-numbers data-noescape>
+							const express = require("express");
+							const connection = require("../db");
+							
+							const router = express.Router();
+							
+							router.get("/:idStartup/scoring", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [scoring] = await connection.query(
+									`SELECT * FROM scoring WHERE startup_id = ? ;`,
+									[idStartup]
+									);
+									res.status(200).json(scoring);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup profile");
+								}
+							});
+						</code>
+					</pre>
+				</section>
+				<section data-auto-animate="">
+					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up afin d'établir son executive summary</p>
+					<p style="font-size:2rem; text-align: start;">Données réparties sur 3 tables :</p>
+					<ul>
+						<li>
+							<p style="font-size:2rem; text-align: start;">‘startup_profile’</p>
+						</li>
+						<li>
+							<p style="font-size:2rem; text-align: start;">‘activity_area’</p>
+						</li>
+						<li>
+							<p style="font-size:2rem; text-align: start;">‘position’</p>
+						</li>
+					</ul>
+					<aside class="notes">
+						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables dans la base de données.
+					</aside>
+				</section>
+				<section data-auto-animate="">
+					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up afin d'établir son executive summary</p>
+				
+					<pre>
+						<code style="max-height: 500px;" data-trim data-line-numbers data-noescape>
+							router.get("/:idStartup/profile", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [
+										profile,
+									] = await connection.query(
+										"SELECT * FROM startup_profile WHERE startup_id = ?;",
+										[idStartup]
+									);
+									res.status(200).json(profile);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup profile");
+								}
+							  });
+							   
+							  router.get("/:idStartup/activities", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [activities] = await connection.query(
+										`SELECT * FROM activity_area WHERE startup_id = ?;`,
+										[idStartup]
+									);
+									Object.keys(activities).forEach((key) => {
+										if (activities[key] === 0) {
+										delete activities[key];
+										}
+									});
+									delete activities.startup_id;
+									delete activities.id;
+									res.status(200).json(activities);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup activity");
+								}
+							  });
+							   
+							  router.get("/:idStartup/positions", async (req, res) => {
+								try {
+									const { idStartup } = req.params;
+									const [positions] = await connection.query(
+										`SELECT * FROM position WHERE startup_id = ?;`,
+										[idStartup]
+									);
+									Object.keys(positions).forEach((key) => {
+										if (positions[key] === 0) {
+										delete positions[key];
+										}
+									});
+									res.status(200).json(positions);
+								} catch (err) {
+									console.error(err);
+									res.status(500).send("A problem occured fetching startup position");
+								}
+							  });
+							  
+						</code>
+					</pre>
+					<aside class="notes">	
+						 + L’id de la startup concernée est passée en paramètre de l’URL, ses informations de profil sont récupérées dans la table ‘startup_profile’
+	
+						+ Les tables ‘position’ et ‘activity_area’ contiennent tous les positionnements et secteurs d’activité possibles pour une startup. 
+						Chaque champ est associée à true ou false (0 ou 1 en SQL) selon si la startup a coché ou non la case dans le questionnaire (checkbox).
+	
+						+ Nous ne souhaitons pas renvoyer les champs dont la valeur est false (0), nous les supprimons donc si tel est le cas
+					</aside>
+				</section>
+				<section>
+					<img src="img/postman-get-activities.PNG">
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Conclusion</h3>
+					<img src="img/logo_wcs.png" ><br>
+					<img style="margin: 30px;" width="400" src="img/logo_gris.png">
 				</section>
 				<section data-auto-animate>
 					<img src="img/logo-edtake.png">
@@ -443,221 +700,6 @@
 				</section>
 				<section>
 					<h3 style="color: #ac109f">Et maintenant ...</h3>
-				</section>
-				<section data-auto-animate>
-					<img src="img/logo_gris.png">
-					<aside class="notes">
-						prototype de l’application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
-						un accélérateur de croissance pour les startups et PME
-					</aside>
-				</section>
-				<section data-auto-animate>
-					<img src="img/logo_gris.png">
-					<p>-> L'accélération de croissance : stratégie de développement, recherche d'investisseurs & levée de fonds, ...
-					</p>
-					<p class="fragment">-> L'ingénierie opérationnelle: mentoring de dirigeants,assistance à maîtrise d'ouvrage, ...
-					</p>
-					<aside class="notes">
-						Les services  proposés s’articulent autour de 2 grands axes :
-					</aside>
-				</section>
-				<section data-auto-animate>
-					<h4>Le projet : développer un un outil de rating/scoring</h4>
-					<aside class="notes">
-						a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
-					</aside>
-				</section>
-				<section data-auto-animate>
-					<h4 style="margin-bottom: 50px;">Le projet : développer un outil de rating/scoring</h4>
-					<ul>
-						<li>Permettre aux startups de s’autoévaluer puis d’éditer un executive summary à envoyer à des investisseurs</li>
-						<li class="fragment">Permettre aux investisseurs de pouvoir se décider sur un one pager et une notation
-						</li>
-						<li class="fragment">Le livrable pour la startup est un Scoring et un Executive Summary.
-						</li>
-					</ul>
-					<aside class="notes">
-						5 familles d'indicateurs / 9 questions par famille / 5 choix de réponses par question
-					</aside>
-				</section>
-				<section>
-					<h3 style="color: #ac109f">Mes réalisations</h3>
-				</section>
-				<section>
-					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Création de la base de données</p>
-					<img class="r-stretch" src="img/db100.png">
-					<aside class="notes">
-						Les données nécessaires à la création d’un scoring et d’un executive summary sont: 
-						2 questionnaires composés chacun de plusieurs questions,
-						Pour une question: un énoncé, un ordre d’apparition, une famille et un type: ouverte ou fermée avec un choix de réponses:
-						Pour une réponse:  un texte et une valeur (exemple: de 1 à 5 pour le scoring).
-
-						En ce qui concerne la startup, elle s’identifie avec un mail et un mot de passe.
-						Après avoir répondu aux deux questionnaires, elle doit pouvoir consulter les résultats de son scoring et générer un executive summary à partir de ses informations de profil. 
-						La base de données a été créée sur MySQL avec le logiciel MySQL Workbench.
-
-						La migration des données est gérée avec le framework db-migrate.
-					</aside>
-				</section>
-				<section>
-					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Poster les réponses d’un questionnaire dans la base de données</p>
-					<pre>
-						<code style="max-height: 600px;" data-trim data-line-numbers=" | 7-11 | 13-24" data-noescape>
-							const express = require("express");
-							const connection = require("../db");
-							const router = express.Router();
-							
-							router.post("/general", async (req, res) => {
-							try {
-								const { generalForm, startupId } = req.body;
-								const { activityArea } = req.body.generalForm;
-								const { startupPosition } = req.body.generalForm;
-								delete generalForm.activityArea;
-								delete generalForm.startupPosition;
-
-								const startupProfileQuery = `INSERT INTO startup_profile SET ? ON DUPLICATE KEY UPDATE ?`;
-								const generalFormValues = { ...generalForm, startup_id: startupId }
-								await connection.query(startupProfileQuery, [generalFormValues, generalFormValues]);
-							
-								const activityAreaQuery = `INSERT INTO activity_area SET ? ON DUPLICATE KEY UPDATE ?;`;
-								const activityAreaValues = { startup_id: startupId, ...activityArea };
-								await connection.query(activityAreaQuery, [activityAreaValues, activityAreaValues]);
-							
-								const positionQuery = `INSERT INTO position SET ? ON DUPLICATE KEY UPDATE ?;`;
-								const positionValues = { startup_id: startupId, ...startupPosition };
-								await connection.query(positionQuery, [positionValues, positionValues]);
-
-								res.sendStatus(200);
-							} catch (error) {
-								res.status(500).send(error);
-							}
-							});
-							module.exports = router;
-
-						</code>
-					</pre>
-					<aside class="notes">
-						Les réponses renvoyées par le questionnaire de profil sont stockées dans 3 tables différentes: startup_profile, position, activity_area.
-						Nous devons donc en premier lieu séparer les données reçues: 
-						+ Puis pour chaque table, envoyer les données correspondantes
-						La syntaxe INSERT INTO … SET est propre à MySQL et équivalente au standard SQL:  INSERT INTO … VALUES
-						L’instruction ON DUPLICATE KEY UPDATE est une fonctionnalité de MySQL qui permet de mettre à jour les données si un enregistrement existe déjà dans la table.
-					</aside>
-				</section>
-				<section>
-					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Récupérer le scoring d'une start-up</p>
-						<img width="500" src="img/rankscoring_scoring_result.png">
-						<img class="r-stretch" src="img/postman-get-scoring.PNG">
-					<aside class="notes">
-						Après avoir répondu au questionnaire, le résultat de chaque famille du scoring de la start-up est stocké dans la table scoring.
-					</aside>
-				</section>
-				<section>
-					<pre>
-						<code data-trim data-line-numbers data-noescape>
-							const express = require("express");
-							const connection = require("../db");
-							
-							const router = express.Router();
-							
-							router.get("/:idStartup/scoring", async (req, res) => {
-								try {
-									const { idStartup } = req.params;
-									const [scoring] = await connection.query(
-									`SELECT * FROM scoring WHERE startup_id = ? ;`,
-									[idStartup]
-									);
-									res.status(200).json(scoring);
-								} catch (err) {
-									console.error(err);
-									res.status(500).send("A problem occured fetching startup profile");
-								}
-							});
-						</code>
-					</pre>
-				</section>
-				<section>
-					<p style="font-size:1.5rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up</p>
-					<pre>
-						<code style="max-height: 600px;" data-trim data-line-numbers data-noescape>
-							router.get("/:idStartup/profile", async (req, res) => {
-								try {
-									const { idStartup } = req.params;
-									const [
-										profile,
-									] = await connection.query(
-										"SELECT * FROM startup_profile WHERE startup_id = ?;",
-										[idStartup]
-									);
-									res.status(200).json(profile);
-								} catch (err) {
-									console.error(err);
-									res.status(500).send("A problem occured fetching startup profile");
-								}
-							  });
-							   
-							  router.get("/:idStartup/activities", async (req, res) => {
-								try {
-									const { idStartup } = req.params;
-									const [activities] = await connection.query(
-										`SELECT * FROM activity_area WHERE startup_id = ?;`,
-										[idStartup]
-									);
-									Object.keys(activities).forEach((key) => {
-										if (activities[key] === 0) {
-										delete activities[key];
-										}
-									});
-									delete activities.startup_id;
-									delete activities.id;
-									res.status(200).json(activities);
-								} catch (err) {
-									console.error(err);
-									res.status(500).send("A problem occured fetching startup activity");
-								}
-							  });
-							   
-							  router.get("/:idStartup/positions", async (req, res) => {
-								try {
-									const { idStartup } = req.params;
-									const [positions] = await connection.query(
-										`SELECT * FROM position WHERE startup_id = ?;`,
-										[idStartup]
-									);
-									Object.keys(positions).forEach((key) => {
-										if (positions[key] === 0) {
-										delete positions[key];
-										}
-									});
-									res.status(200).json(positions);
-								} catch (err) {
-									console.error(err);
-									res.status(500).send("A problem occured fetching startup position");
-								}
-							  });
-							  
-						</code>
-					</pre>
-					<aside class="notes">
-						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables dans la base de données.
-	
-						 + L’id de la startup concernée est passée en paramètre de l’URL, ses informations de profil sont récupérées dans la table ‘startup_profile’
-	
-						+ Les tables ‘position’ et ‘activity_area’ contiennent tous les positionnements et secteurs d’activité possibles pour une startup. 
-						Chaque champ est associée à true ou false (0 ou 1 en SQL) selon si la startup a coché ou non la case dans le questionnaire (checkbox).
-	
-						+ Nous ne souhaitons pas renvoyer les champs dont la valeur est false (0), nous les supprimons donc si tel est le cas: 
-	
-					</aside>
-				</section>
-				<section>
-					<img src="img/postman-get-activities.PNG">
-				</section>
-				<section>
-					<h3 style="color: #ac109f">Conclusion</h3>
-					<img src="img/logo_wcs.png" ><br>
-					<img style="margin: 30px;" width="350" src="img/logo-edtake.png">
-					<img style="margin: 30px;" width="400" src="img/logo_gris.png">
 				</section>
 			</div>
 		</div>
