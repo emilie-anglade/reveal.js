@@ -377,21 +377,12 @@
 					</aside>
 				</section>
 				<section>
-					<h3 style="color: #ac109f">Mes réalisations</h3>
-					<ul>
+					<h3 style="color: #ac109f">Réalisations :</h3>
+					<ul style="line-height: 2; font-size: 2rem;">
 						<li>Développement d’un outil permettant de créer une composition graphique</li>
 						<li>Architecture du produit</li>
-						<li>Amélioration de l'expérience utilisateur</li>
+						<li>Mise en place de la phase de bêta-test</li>
 					</ul>
-				</section>
-				<section data-auto-animate>
-					<p style="font-size:3rem; text-align: center; color: #ac109f">Développement d’un outil permettant de créer une composition graphique</p>
-					<aside class="notes">
-						L’utilisateur a la possibilité de créer un visuel pour illustrer la scène.
-						L’outil doit lui permettre d’ajouter diverses formes graphiques (rectangle, cercle, flèche bulles…), des images et du texte. 
-						Puis de les déplacer, de modifier leur taille, leur inclinaison, leur couleur de remplissage, leur bordure, leur ordre d’apparition dans le plan et de les supprimer.
-						Pour développer cet outil j’ai utilisé ‘Vue Konva’: une librairie Javascript permettant de créer des canvas complexes en utilisant Vue.js. en liaison avec le framework Konva.
-					</aside>
 				</section>
 				<section data-auto-animate>
 					<p style="font-size:2rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Développement d’un outil permettant de créer une composition graphique</p>
@@ -413,6 +404,12 @@
 							Modification de l'ordre d'apparition de chaque élément
 						</li>
 					</ul>
+					<aside class="notes">
+						L’utilisateur a la possibilité de créer un visuel pour illustrer la scène.
+						L’outil doit lui permettre d’ajouter diverses formes graphiques (rectangle, cercle, flèche bulles…), des images et du texte. 
+						Puis de les déplacer, de modifier leur taille, leur inclinaison, leur couleur de remplissage, leur bordure, leur ordre d’apparition dans le plan et de les supprimer.
+						Pour développer cet outil j’ai utilisé ‘Vue Konva’: une librairie Javascript permettant de créer des canvas complexes en utilisant Vue.js. en liaison avec le framework Konva.
+					</aside>
 				</section>
 				<section data-auto-animate>
 					<p style="font-size:2rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Développement d’un outil permettant de créer une composition graphique</p>
@@ -429,11 +426,20 @@
 						</li>
 					</ul>
 				</section>
+				<section>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Placement et transformation des éléments</p>
+					<p style="text-align: start; font-size: 1.5rem;">Restituer la configuration de chaque élément dans le composant Vue Konva correspondant : </p>
+					<img class="r-stretch" src="img/vue-konva-template.png">
+					<aside class="notes">
+						Pour chaque type de shape à afficher, sa configuration doit etre passée dans un composant vue konva tel que v-rect ou v-circle... 
+						Il en existe en tout une douzaine
+					</aside>
+				</section>
 				<section data-auto-animate>
 					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Placement et transformation des éléments</p>
 					<p style="text-align: start; font-size: 1.5rem;">Un composant générique 'V-Draw' : </p>
 						<pre style="font-size: 0.95rem;">
-							<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers="1-11 | 44-48 | 14-33 | 40-50">
+							<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers="1-11 | 35-39 | 14-33 | 40-50">
 								<script type="text/template">
 									components/CanvasEditor.vue
 									<v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown">
@@ -492,14 +498,15 @@
 						<aside class="notes">
 							Création composant générique V-Draw qui va gérer toute la mécanique de création et de placement de la shape en fonction de son type
 							Les shapes sont stockées dans un tableau shapesList, 
-							Une itération est faite sur ce tableau dans le composant V-draw 
-							la shape est passée dans les props du composant 
-							permet de restituer pour chaque forme le composant Konva attendue dans le layer.
+							 + Une itération est faite sur ce tableau dans le composant V-draw 
+							 + la shape est passée dans les props du composant 
+							 + qui permet de restituer pour chaque forme le composant Konva attendue dans le layer.
+							 + le composant permet également de rattacher chaque shape aux fonctions qui gère la transformation et le déplacement des éléments
 						</aside>
 				</section>
 				<section data-auto-animate>
 					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Emplacement de chaque élément dans la pile</p>
-					<p style="font-size: 2rem; ">Gérer l'ordre d'apparition dans le layer </p>
+					<p style="text-align: start; font-size: 1.5rem;">Gérer l'ordre d'apparition dans le layer </p>
 					<img src="img/codesandbox-order-shape.png">
 					<aside class="notes">
 						Emplacement ds pile fonction de son rang dans la liste affichée dans le layer
@@ -648,9 +655,9 @@
 				</section>
 				<section data-auto-animate>
 					<p style="font-size:3rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Architecture du composant</p>
-					<p style="font-size:2rem; text-align: start;"  class="fragment" data-fragment-index="1">Problématique : </p>
+					<p style="font-size:2rem; text-align: start;"  >Problématique : </p>
 					<ul style="font-size: 1.9rem; line-height: 2;">
-						<li class="fragment" data-fragment-index="1">
+						<li>
 							<p>Créer un produit modulaire intégrable dans une application</p>
 							<ul class="fragment">
 								<li>Gestion autonome des états et de la mise à jour des données du composant</li>
@@ -671,7 +678,89 @@
 					<img src="img/architecture.png" class="r-stretch">
 				</section>
 				<section>
-					<h3 style="color: #ac109f">Et maintenant ...</h3>
+					<p style="font-size:2rem; text-align: start;">Le store Vuex</p>
+					<ul  style="font-size: 1.5rem;">
+						<li>
+							Gestion du state global
+						</li>
+						<li>
+							Centralisation des données nécessaires à plusieurs composants
+						</li>
+					</ul>
+					<pre style="font-size: 1rem;">
+						<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers>
+							<script type="text/template">
+								export const state = () => ({
+									storyboard: {},
+									sceneToDisplay: undefined,
+									...
+								})
+								export const getters = {
+									getScenes (state) {
+										const scenes = [...state.storyboard.scenes]
+										const res = scenes.sort((a, b) => {
+											return a.order - b.order
+										})
+										return res
+									},
+									...
+								}
+								export const actions = {
+									addNewScene ({ getters, commit }) {
+										const _id = ObjectID().toHexString()
+										const order = getters.getScenes.length > 0 ? getters.getScenes.map(e => e.order).reduce((a, b) => Math.max(a, b)) : 0
+										const newSceneStructure = { order: order + 1, _id, properties: { title: '', image: null, canvas: [], description: '' }, script: [] }
+										commit('ADD_NEW_SCENE', newSceneStructure)
+									},
+									...
+								}
+								export const mutations = {
+									ADD_NEW_SCENE (state, payload) {
+									  state.storyboard.scenes.push(payload)
+									},
+									...
+								}
+							</script>
+						</code>
+					</pre>
+					<aside class="notes">
+						Gestion du state global par ex scene To display dont l'état est necessaire et peut etre muté depuis les composants overview, navigation et scene edition
+						Centralisation des données par exemple à l'ajout d'une nouvelle scène mise à jour en temps réel de la barre de nav et de l'overview grace au getter getScenes
+					</aside>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Mise en place de la phase de bêta-test</h3>
+					<ul>
+						<li>
+							Mise en place d'une base de données avec Cloud Firestore
+						</li>
+						<li>
+							Ajout d'un système d'authentification et déploiment de l'application sur Firebase 
+						</li>
+						<li>
+							Rédaction d'une documentation à destination de l'utilisateur final en concertation avec l'équipe marketing
+						</li>
+						<li>
+							Déploiement de deux nouvelles fonctionnalités : 
+							<ul>
+								<li>
+									Export PDF du storyboard 
+								</li>
+								<li>
+									Présentation dynamique du storyboard
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">Conclusion</h3>
+					<aside>
+						Projet extrêment enrichissant, totale confiance de mon tuteur de stage, suite du projet en semptembre 
+					</aside>
+				</section>
+				<section>
+					<h3 style="color: #ac109f">FIN</h3>
 				</section>
 			</div>
 		</div>
