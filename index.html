@@ -20,30 +20,23 @@
 					<h4>Titre professionnel développeuse web et web mobile</h4>
 					<p style="color: #ac109f">Emilie Anglade</p>
 				</section>
-				<section>
-					<img width="350" src="img/logo_gris.png"> <p>1. Développer la partie back-end d'une application web</p>
-					<img width="300" src="img/logo-edtake.png"> <p>2. Développer la partie front-end d'une application web</p>
+				<section data-auto-animate>
+					<img width="350" src="img/logo_gris.png"> 
+					<p>1. Développer la partie back-end d'une application web</p>
+					<img width="300" src="img/logo-edtake.png"> 
+					<p>2. Développer la partie front-end d'une application web</p>
 				</section>
 				<section data-auto-animate>
-					<img width="600" src="img/logo_gris.png">
+					<img width="350" src="img/logo_gris.png">
+					<p>Accélérateur de croissance pour les startups et les PME</p>
 					<aside class="notes">
-						prototype de l’application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
-						un accélérateur de croissance pour les startups et PME
+						projet client école
+						prototype application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
+						un accélérateur de croissance pour les startups et PME et service d'ingénierie opérationnelle
 					</aside>
-				</section>
-				<section data-auto-animate>
-					<img width="400" src="img/logo_gris.png">
-					<p style="text-align: left;">2 grands axes : </p>
-					<p style="text-align: left;">- L'accélération de croissance : stratégie de développement, recherche d'investisseurs & levée de fonds, ...
-					</p>
-					<p style="text-align: left;" class="fragment">- L'ingénierie opérationnelle: mentoring de dirigeants,assistance à maîtrise d'ouvrage, ...
-					</p>
 				</section>
 				<section data-auto-animate>
 					<h4>Le projet : développer un outil de rating/scoring</h4>
-					<aside class="notes">
-						a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
-					</aside>
 				</section>
 				<section data-auto-animate>
 					<h4 style="margin-bottom: 50px;">Le projet : développer un outil de rating/scoring</h4>
@@ -55,16 +48,32 @@
 						</li>
 					</ul>
 					<aside class="notes">
+						Produit a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
 						2 questionnaires pour la start-up: général et scoring: 5 familles d'indicateurs / 9 questions par famille / 5 choix de réponses par question
 					</aside>
 				</section>
 				<section>
 					<h3 style="color: #ac109f">Outils utilisés</h3>
 					<img src="img/nodejs-new-pantone-black.svg" width="250">
+					<img src="img/express-facebook-share.png" width="250">
 					<img src="img/mysql_workbench.jpg" width="250">
 				</section>
 				<section>
-					<h3 style="color: #ac109f">Mes réalisations</h3>
+					<h3 style="color: #ac109f">Réalisations : </h3>
+					<ul>
+						<li>
+							Création de la base de données
+						</li>
+						<li>
+							Poster les réponses du questionnaire 'Général' dans la base de données
+						</li>
+						<!-- <li>
+							Récupérer le scoring d'une start-up
+						</li> -->
+						<li>
+							Récupérer toutes les données relatives à une start-up afin d'établir son executive summary
+						</li>
+					</ul>
 				</section>
 				<section>
 					<p style="color: #ac109f">Création de la base de données</p>
@@ -106,7 +115,7 @@
 				</section>
 				<section>
 					<p style="font-size:2rem; text-align: start; color: #ac109f">Poster les réponses du questionnaire 'Général' dans la base de données</p>
-					<pre>
+					<pre style="font-size: 0.95rem;">
 						<code style="max-height: 500px;" data-trim data-line-numbers="7-11 | 13-24" data-noescape>
 							const express = require("express");
 							const connection = require("../db");
@@ -149,10 +158,12 @@
 						L’instruction ON DUPLICATE KEY UPDATE est une fonctionnalité de MySQL qui permet de mettre à jour les données si un enregistrement existe déjà dans la table.
 					</aside>
 				</section>
-				<section data-auto-animate>
+				<!-- <section data-auto-animate>
 					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer le scoring d'une start-up</p>
-						<img width="500" src="img/rankscoring_scoring_result.png">
-						<img class="r-stretch" src="img/postman-get-scoring.PNG">
+					<div class="r-stack">
+						<img width="800" src="img/rankscoring_scoring_result.png">
+						<img class="fragment" width="800" src="img/postman-get-scoring.PNG">
+					</div>
 					<aside class="notes">
 						Après avoir répondu au questionnaire, le résultat de chaque famille du scoring de la start-up est stocké dans la table scoring.
 					</aside>
@@ -181,8 +192,8 @@
 							});
 						</code>
 					</pre>
-				</section>
-				<section data-auto-animate="">
+				</section> -->
+				<section data-auto-animate>
 					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up afin d'établir son executive summary</p>
 					<p style="font-size:2rem; text-align: start;">Données réparties sur 3 tables :</p>
 					<ul>
@@ -200,11 +211,11 @@
 						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables dans la base de données.
 					</aside>
 				</section>
-				<section data-auto-animate="">
+				<section data-auto-animate>
 					<p style="font-size:2rem; text-align: start; color: #ac109f">Récupérer toutes les données relatives à une start-up afin d'établir son executive summary</p>
 				
 					<pre>
-						<code style="max-height: 500px;" data-trim data-line-numbers data-noescape>
+						<code style="max-height: 500px;" data-trim data-line-numbers="17-55 | 45-49" data-noescape>
 							router.get("/:idStartup/profile", async (req, res) => {
 								try {
 									const { idStartup } = req.params;
@@ -277,20 +288,24 @@
 				</section>
 				<section>
 					<h3 style="color: #ac109f">Conclusion</h3>
-					<img src="img/logo_wcs.png" ><br>
+					<img src="img/logo_wcs.png" width="300" >
 					<img style="margin: 30px;" width="400" src="img/logo_gris.png">
+					<aside class="notes">
+						Expérience trés enrichissante, dev fonctionnalités front en parrallele, pair programming 
+					</aside>
 				</section>
 				<section data-auto-animate>
-					<img src="img/logo-edtake.png">
+					<h4 style="color: #ac109f">Développer la partie front-end d'une application web</h3>
+					<img class="fragment" src="img/logo-edtake.png">
 					<aside class="notes">
-						jeune start up 2019 , secteur edtech, équipe, méthode de travail
+						jeune start up 2019 , secteur edtech, équipe
 					</aside>
 				</section>
 				<section data-auto-animate>
 					<img src="img/logo-edtake.png">
 					<p>Simplifier la conception des projets de formation à distance
 					</p>
-					<p class="fragment">-> un logiciel dédié qui permet de répondre aux besoins de gestion et de production des utilisateurs.
+					<p class="fragment">Un logiciel dédié qui permet de répondre aux besoins de gestion et de production des utilisateurs
 					</p>
 					<aside class="notes">
 						Objectif: simplifier la conception des projets de formation à distance tout en gardant une vue d’ensemble et en centralisant toutes les ressources nécessaires au développement de chaque projet (talents, livrables, modèles, plannings…)
@@ -307,6 +322,7 @@
 				</section>
 				<section data-auto-animate>
 					<h4 style="margin-bottom: 50px;">Le projet : développer un éditeur de storyboard</h4>
+					<p style="font-size:2rem; text-align: start;">Fonctionnalités attendues :</p>
 					<ul>
 						<li>créer un storyboard</li>
 						<li class="fragment">créer une scène,</li>
@@ -316,44 +332,45 @@
 						<li class="fragment">exporter les données vers Excel.</li>
 					</ul>
 					<aside class="notes">
-						Fonctionnalités attendues: <br>
-						créer un storyboard et lui donner un titre, <br>
-						créer une scène, lui donner un titre, une description, rédiger son script <br>
-						créer un visuel par import d’images et/ou composition graphique, <br>
-						visualiser un résumé de son storyboard et de ses scènes, <br>
-						exporter les données vers Excel. <br>
+						Fonctionnalités attendues:
+						créer un storyboard et lui donner un titre,
+						créer une scène, lui donner un titre, une description, rédiger son script
+						créer un visuel par import d’images et/ou composition graphique,
+						visualiser un résumé de son storyboard et de ses scènes,
+						exporter les données vers Excel.
 					</aside>
 				</section>
 				<section>
+					<p style="font-size:2rem; text-align: start; margin-bottom: 60px; color:#ac109f">3 phases de développement</p>
 					<table>
 						<thead>
 							<tr>
-								<th align="center">R&D</th>
-								<th align="center">V.0</th>
-								<th align="center">MVP</th>
+								<th class="fragment" data-fragment-index="1" align="center">R&D</th>
+								<th class="fragment" data-fragment-index="2" align="center">V.0</th>
+								<th class="fragment" data-fragment-index="3" align="center">MVP</th>
 							</tr>
 						</thead>
-						<tbody style="font-size:xx-large;">
+						<tbody style="font-size:1.6rem;">
 							<tr>
-								<td>structuration des données et des objets</td>
-								<td>structuration du code</td>
-								<td>refonte de l'expérience utilisateur</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="1">Structuration des données et des objets</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="2">Structuration du code</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="3">Refonte de l'expérience utilisateur</td>
 							</tr>
 							<tr>
-								<td>modélisation du produit</td>
-								<td>gestion de la mémoire</td>
-								<td>génération d’une présentation dynamique</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="1">Modélisation du produit</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="2">Gestion de la mémoire</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="3">Génération d’une présentation dynamique</td>
 							</tr>
 							<tr>
-								<td>recherche de librairies</td>
-								<td>mise en place d’un système de state management</td>
-								<td>génération d'un PDF exportable</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="1">Recherche de librairies</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="2">Mise en place d’un système de state management</td>
+								<td style="vertical-align: middle;" class="fragment" data-fragment-index="3">Génération d'un PDF exportable</td>
 							</tr>
 						</tbody>
 					</table>
 					<aside class="notes">
-						R&D: Vue.js Konva.js
-						V0: Vuex
+						R&D: apprentissage Vue.js Konva.js
+						V0: apprentissage Vuex architecture du produit
 						MVP: rédaction documentation avec l’équipe marketing,
 						utilisation du framework reveal.js,
 						jspdf 
@@ -361,181 +378,14 @@
 				</section>
 				<section>
 					<h3 style="color: #ac109f">Mes réalisations</h3>
+					<ul>
+						<li>Développement d’un outil permettant de créer une composition graphique</li>
+						<li>Architecture du produit</li>
+						<li>Amélioration de l'expérience utilisateur</li>
+					</ul>
 				</section>
-				<section>
-					<p style="font-size:2rem; text-align: start; color: #ac109f">1. Création d’un conteneur de scènes permettant d’enregistrer les propriétés de la scène et son script</p>
-					<img src="img/scene-editor.png">
-					<aside class="notes">
-						decoupage 3 composants
-					</aside>
-				</section>
-				<section>
-					<pre>
-						<code class="hljs" data-trim data-line-numbers>
-							<script type="text/template">
-								<template>
-									<v-textarea
-										:value="sceneProperties.description"
-										:placeholder="$t('sceneDescriptionPlaceholder')"
-										rows="4"
-										@input="editSceneDescription"
-									/>
-								</template>
-								  
-								<script>
-								import { mapGetters } from 'vuex'
-
-								export default {
-									computed: {
-										...mapGetters({
-											sceneProperties: 'storyboard/getSceneToEditProperties'
-										})
-									},
-									methods: {
-										editSceneDescription (e) {
-										this.$store.dispatch('storyboard/editSceneDescription', e)
-										}
-									}
-								}
-								</script>
-							</script>
-						</code>
-					</pre>
-					<aside class="notes">
-						Les ‘value’ de chaque input sont bindées sur l’accesseur du store: ‘sceneProperties’.
-						La fonction mapGetters() permet d’attacher les accesseurs du  store aux propriétés calculées locales (computed): 
-					</aside>
-				</section>
-				<section>
-					<p style="font-size:2rem; text-align: start; color: #ac109f">2. Création d’un éditeur de script</p>
-					<img src="img/script_editor.png">
-					<aside class="notes">
-						pour chaque action: type, élément concerné, détail de l'action
-						clic: action ajoutée dans le script de la scène en cours
-					</aside>
-				</section>
-				<section>
-					<pre>
-						<code class="hljs" data-trim data-line-numbers="12-14| 32-41|3-10| 18, 21-30">
-							<script type="text/template">
-								<template>
-									<v-simple-table>
-										<draggable v-model="script" tag="tbody">
-											<tr
-												v-for="(action, index) in script"
-												:key="action._id"
-											>
-											<!-- SCRIPT EDITOR  -->
-											</tr>
-										</draggable>
-									</v-simple-table>
-										<v-btn @click="addScriptEditor">
-											<v-icon dark>mdi-plus</v-icon>
-										</v-btn>
-								</template>
-								  
-								<script>
-								import draggable from 'vuedraggable'
-
-								export default {
-									computed: {
-										script: {
-											get () {
-												return this.$store.getters['storyboard/getOrderedScriptList']
-											},
-											set (value) {
-												this.$store.dispatch('storyboard/updateScript', value)
-											}
-										}
-									},
-									methods: {
-										addScriptEditor () {
-											const scriptLength = this.script.length
-											let actionType
-											if (scriptLength > 0) {
-												actionType = this.script[scriptLength - 1].type
-											} else {
-												actionType = undefined
-											}
-											this.$store.dispatch('storyboard/addScriptEditor', actionType)
-										}
-									}
-								}
-								</script>
-							</script>
-						</code>
-					</pre>
-					<aside class="notes">
-						action addscript editor initialise un nouvel objet dans le store
-						fonction de drag-and-drop avec le composant ‘vuedraggable’ de la librairie Sortable.js.
-						Mutateur (set) au computed, ordre des scènes mis à jour dans le state à chaque déplacement: 
-
-					</aside>
-				</section>
-				<section>
-					<p style="font-size:2rem; text-align: start; color: #ac109f">3. Export des données triées</p>
-					<img src="img/scene_summary.png">
-				</section>
-				<section>
-					<pre>
-						<code class="hljs" data-trim data-line-numbers="9-25 | 2-7 | 26-34 " data-noescape>
-							<script type="text/template">
-								<script>
-									computed: {
-										dialogueList () {
-										  return this.selectAction('dialogue')
-										},
-										...
-									}
-									methods: {
-										selectAction (actionType) {
-											const result = []
-		
-											const script = this.sceneToEdit.script
-		
-											const filteredActions = script.filter(action => action.type === actionType)
-											
-											filteredActions.forEach((item) => {
-												const assetObject = this.assets.find(i => i._id === item.actionData.assetId)
-												result.push({ 
-													asset: assetObject ? assetObject.name : undefined, 
-													description: item.actionData.description, 
-													actionType: item.type 
-												})
-											})
-											return result
-										},
-										onExport () {
-											const dialogWS = XLSX.utils.json_to_sheet(this.dialogueList)
-											...
-											const wb = XLSX.utils.book_new() // make Workbook of Excel
-											XLSX.utils.book_append_sheet(wb, dialogWS, 'dialogues') // dialogues is name of Worksheet
-											...
-											// export Excel file
-											XLSX.writeFile(wb, `${this.sceneToEdit.properties.title}.xlsx`) // name of the file is scene title
-										}
-									}
-								</script>
-							</script>
-						</code>
-					</pre>
-					<aside class="notes">
-						Le script doit être en premier lieu trié par type d’action, 
-						puis le nom de l’élément concerné dans chaque action doit être récupéré.
-						( Le nom et les images d’un élément créé par l’utilisateur sont stockés dans le tableau assets du storyboard,
-						 seul leur id est enregistré dans le script )
-
-						fonction selectAction: paramètre le type d’action.
-						Je récupère ensuite les éléments concernés par le type d’action avec la méthode filter(), 
-						puis je récupère dans le tableau des éléments: this.assets, le nom de l’élément utilisé dans le script, 
-						avec la méthode forEach().
-						+ Cette fonction est ensuite appliqué à chaque type d’action:
-						+ clic sur le bouton ‘Export Excel’, données json exportées dans un classeur Excel, grâce au package npm xlsx
-					</aside>
-				</section>
-				<section>
-					<p style="font-size:2rem; text-align: start; color: #ac109f">4. Développement d’un outil permettant de créer une composition graphique</p>
-					<img src="img/konva.png">
+				<section data-auto-animate>
+					<p style="font-size:3rem; text-align: center; color: #ac109f">Développement d’un outil permettant de créer une composition graphique</p>
 					<aside class="notes">
 						L’utilisateur a la possibilité de créer un visuel pour illustrer la scène.
 						L’outil doit lui permettre d’ajouter diverses formes graphiques (rectangle, cercle, flèche bulles…), des images et du texte. 
@@ -543,99 +393,197 @@
 						Pour développer cet outil j’ai utilisé ‘Vue Konva’: une librairie Javascript permettant de créer des canvas complexes en utilisant Vue.js. en liaison avec le framework Konva.
 					</aside>
 				</section>
-				<section>
+				<section data-auto-animate>
+					<p style="font-size:2rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Développement d’un outil permettant de créer une composition graphique</p>
+					<p style="font-size:2rem; text-align: start;" class="fragment" data-fragment-index="1">Fonctionnalités attendues : </p>
+					<ul style="font-size: 1.9rem; line-height: 2;">
+						<li class="fragment" data-fragment-index="1">
+							Ajout de diverses formes graphiques, 
+						</li>
+						<li class="fragment">
+							Ajout d'images
+						</li>
+						<li class="fragment">
+							Ajout de textes
+						</li>
+						<li class="fragment">
+							Modification des caractéristiques de chaque élément 
+						</li>
+						<li class="fragment">
+							Modification de l'ordre d'apparition de chaque élément
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<p style="font-size:2rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Développement d’un outil permettant de créer une composition graphique</p>
+					<p style="font-size:2rem; text-align: start;" >Problématiques : </p>
+					<ul style="font-size: 1.9rem; line-height: 2;">
+						<li class="fragment">
+							<p>Placement et transformation d'éléments aux configurations différentes</p> 
+						</li>
+						<li class="fragment">
+							<p>Emplacement de chaque élément dans la pile</p>
+						</li>
+						<li class="fragment">
+							<p>Identification d'un élément au clic</p>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Placement et transformation des éléments</p>
+					<p style="text-align: start; font-size: 1.5rem;">Un composant générique 'V-Draw' : </p>
+						<pre style="font-size: 0.95rem;">
+							<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers="1-11 | 44-48 | 14-33 | 40-50">
+								<script type="text/template">
+									components/CanvasEditor.vue
+									<v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown">
+										<v-layer>
+											<VDraw
+												v-for="item in shapesList"
+												:key="item.config.name"
+												:item="item"
+											/>
+											<v-transformer ref="transformer" />
+										</v-layer>
+									</v-stage>
+									
+									components/VDraw.vue
+									<template>
+										<v-rect
+											v-if="item.type === 'rect'"
+											:config="{
+												...item.config,
+												item.config.id
+											}"
+											@dragmove="handleDragMove"
+											@transformend="handleTransformEnd"
+											/>
+										<v-circle
+											v-if="item.type === 'circle'"
+											:config="{
+												...item.config,
+												item.config.id
+											}"
+											@dragmove="handleDragMove"
+											@transformend="handleTransformEnd"
+										/>
+									</template>
+									<script>
+										props: {
+											item: {
+												type: Object
+											}
+										},
+										methods: {
+											handleTransformEnd (e) {
+												const config = e.target.attrs
+												this.$store.dispatch('canvas/transformShape', config)
+											},
+											handleDragMove (e) {
+												const x = e.target.attrs.x
+												const y = e.target.attrs.y
+												this.$store.dispatch('canvas/editShapePosition', {x, y})
+											}
+										}
+									</script>
+								</script>
+							</code>
+						</pre>
+						<aside class="notes">
+							Création composant générique V-Draw qui va gérer toute la mécanique de création et de placement de la shape en fonction de son type
+							Les shapes sont stockées dans un tableau shapesList, 
+							Une itération est faite sur ce tableau dans le composant V-draw 
+							la shape est passée dans les props du composant 
+							permet de restituer pour chaque forme le composant Konva attendue dans le layer.
+						</aside>
+				</section>
+				<section data-auto-animate>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Emplacement de chaque élément dans la pile</p>
+					<p style="font-size: 2rem; ">Gérer l'ordre d'apparition dans le layer </p>
+					<img src="img/codesandbox-order-shape.png">
+					<aside class="notes">
+						Emplacement ds pile fonction de son rang dans la liste affichée dans le layer
+						1er élément restitué dans la layer sera au dernier plan sur la page
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Emplacement de chaque élément dans la pile</p>
+					<p style="text-align: start; font-size: 1.6rem;">Attribution d'un numéro d'ordre à chaque élément : </p>
 					<pre>
-						<code class="hljs" data-trim data-line-numbers="1-4 | 5 - 11 | 12-35" data-noescape>
+						<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers="14-18 | 23-38 | 24, 27 | 2, 7-13">
 							<script type="text/template">
 								export const state = () => ({
 									shapesList: [],
-									...
+									selectedShape: undefined
 								})
+								
 								export const getters = {
+									getShapes (state) {
+										const shapes = [...state.shapesList]
+										const res = shapes.sort((a, b) => {
+											return a.order - b.order
+										})
+										return res
+									},
 									getNewOrder (state) {
-										return state.shapesList.length > 0 
+									  	return state.shapesList.length > 0 
 										? state.shapesList.map(e => e.order).reduce((a, b) => Math.max(a, b)) 
 										: 0
-									}
-								}
-								export const actions = {
-									addCircleShape ({ state, getters, commit }) {
+									},
+									...
+								  }
+								  
+								  export const actions = {
+									addArrowShape ({ commit, getters }) {
 										const newOrder = getters.getNewOrder
 										const newId = ObjectID().toHexString()
 										const payload = { 
 											order: newOrder + 1, 
-											type: 'circle', 
+											type: 'arrow', 
 											config: { 
 												id: newId, 
-												name: `circle_${newId}`, 
+												name: `arrow_${newId}`, 
 												x: 100, 
 												y: 100, 
-												radius: 50, 
-												rotation: 0, 
-												fill: #000000, 
-												shadowBlur: 0, 
-												stroke: '#000000', 
-												strokeWidth: 1, 
-												strokeScaleEnabled: false, 
-												draggable: true 
-											} }
+												points: [0, 0, 100, 0], 
+												pointerLength: 15, 
+												pointerWidth: 15, 
+												...
+											} 
+										}
 										commit('ADD_SHAPE', payload)
 									},
-								}
+									...
 							</script>
 						</code>
 					</pre>
 					<aside class="notes">
-						Un store est dédié à la gestion du canvas. 
-						Dans le state, un tableau nommé ‘shapesList’ stocke la configuration de chaque forme
-						 ajoutée au canvas ainsi que son ordre d’apparition.
-						L'ordre d'apparition de chaque scène ajoutée doit être superieur à l'ordre le plus haut de la liste des shapes 
-						 + fonction reduce  
-						 + Exemple d'ojet ajouté à shaoesLIst, si l’utilisateur ajoute un cercle: 
-
+						Le numéro d'ordre est calculé avec le getter getNewOrder qui va restituer le numéro d'ordre
+						le plus élevé de la liste des éléments puis attribué à l'élément à sa création
+						La liste des éléments à afficher est récupérée dans le store grâce à un getter. 
+						Pour etre sure que l'ordre de chaque scène est respecté j'applique la méthode sort 
+						qui va trié la liste selon le numéro d'ordre de chaque élément
+						C'est avec ce numéro d'ordre que j'ai pu gérer une autre fonctionnalité à savoir permettre au user de reculer / avancer d'un plan un élément
 					</aside>
 				</section>
-				<section>
-					<pre>
-						<code class="hljs" data-trim data-line-numbers="1-11 | 13-27">
-							<script type="text/template">
-								components/CanvasEditor.vue
-								<v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown">
-									<v-layer>
-										<VDraw
-											v-for="item in shapesList"
-											:key="item.config.name"
-											:item="item"
-										/>
-										<v-transformer ref="transformer" />
-									</v-layer>
-								</v-stage>
-								
-								components/VDraw.vue
-								<template>
-									...
-									<v-circle
-									  v-if="item.type === 'circle'"
-									  :config="{ ...item.config, item.id}"  />
-								</template>
-								<script>
-									props: {
-										item: {
-											type: Object
-										}
-									},
-									...
-								</script>
-							</script>
-						</code>
-					</pre>
-					<aside class="notes">
-						Une itération est faite sur cette liste dans un composant nommé V-draw permettant de restituer pour chaque forme la configuration attendue par Vue Konva dans le layer.
-					</aside>
+				<section data-auto-animate>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Identification d'un élément au clic</p>
+					<p style="text-align: start; font-size: 1.9rem;">Enjeux : </p>
+					<ul  style="font-size: 1.9rem; line-height: 2;">
+						<li>
+							Rattacher le 'v-transformer' à l'élément sélectionné 
+						</li>
+						<li>
+							Mettre à jour la 'toolbar' en fonction de l'élément sélectionné
+						</li>
+					</ul>
 				</section>
+				
 				<section>
+					<p style="text-align: center; font-size: 2rem; color: #ac109f;">Identification d'un élément au clic</p>
+					<p style="text-align: start; font-size: 1.6rem;">Déclenchement d'une fonction d'identification à chaque clic dans le stage @mouseDown="handleStageMouseDown"</p>
 					<pre>
-						<code data-trim data-line-numbers>
+						<code style="max-height: 500px;" class="hljs" data-trim data-line-numbers="3-9 | 11-24 | 28 | 31-45 ">
 							<script type="text/template">
 								handleStageMouseDown (e) {
 									// clicked on stage - clear selection
@@ -686,17 +634,41 @@
 						</code>
 					</pre>
 					<aside class="notes">
-						A chaque clic de l’utilisateur sur le stage, la fonction ‘handleStageMouseDown()’ est activée. 
+						Création d'une fonction d'identification qui est appelée à chaque clic de l'user dans le stage 
 						Elle va vérifier si la cible du clic est le stage ou une shape. 
-						Si la cible du clic est le stage, le state local est alors réinitialisé.
-						Si la cible du clic est une shape: 
-						le transformer est déclenché et rattaché à la shape sélectionnée
-						le state local (data) est actualisé en fonction de son type. 
-						
-						Le composant CanvasToolbar /> reçoit en props deux éléments du state local: ‘editText’ et ‘editShapeColor’ pour lui permettre de s’actualiser en fonction de la shape sélectionnée 
-						(exemple: affichage du sélecteur de police d’écriture  uniquement si la shape est de type ‘text’ ou affichage du colorpicker pour choisir une couleur de remplissage uniquement si la shape est de type ‘rect’ ou ‘circle’). 
-
+						Si la cible du clic est le stage, le state local est alors réinitialisé, si une shape était sélectionné elle est déselctionnée.
+						 + Si la cible du clic est une shape: 
+						le state local est actualisé en fonction de son type. et permet ainsi l'actualisation de la Toolbar qui est branché sur le ce meme state 
+						+ le transformer est déclenché 
+						+ transformer rattaché à la shape sélectionnée grace à son id 
 					</aside>
+				</section>
+				<section data-auto-animate>
+					<p style="font-size:3rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Architecture du composant</p>
+				</section>
+				<section data-auto-animate>
+					<p style="font-size:3rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Architecture du composant</p>
+					<p style="font-size:2rem; text-align: start;"  class="fragment" data-fragment-index="1">Problématique : </p>
+					<ul style="font-size: 1.9rem; line-height: 2;">
+						<li class="fragment" data-fragment-index="1">
+							<p>Créer un produit modulaire intégrable dans une application</p>
+							<ul class="fragment">
+								<li>Gestion autonome des états et de la mise à jour des données du composant</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<p style="font-size:3rem; text-align: center; color: #ac109f; margin-bottom: 70px;">Architecture du composant</p>
+					<ul style="font-size: 1.9rem; line-height: 2;">
+						<li>
+							Un composant parent 'Storyboard'
+						</li>
+						<li>
+							Un système de state management : store Vuex
+						</li>
+					</ul>
+					<img src="img/architecture.png" class="r-stretch">
 				</section>
 				<section>
 					<h3 style="color: #ac109f">Et maintenant ...</h3>
