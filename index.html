@@ -28,15 +28,18 @@
 				</section>
 				<section data-auto-animate>
 					<h4>Développer la partie back-end d'une application web</h4>
-					<img width="350" src="img/logo_gris.png"> 
+					<img width="350" src="img/logo_gris.png">
+					<aside class="notes">
+						projet client école
+						prototype application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
+						 + un accélérateur de croissance pour les startups et PME et service d'ingénierie opérationnelle
+					</aside>
 				</section>
 				<section data-auto-animate>
 					<img width="350" src="img/logo_gris.png">
 					<p>Accélérateur de croissance pour les startups et les PME</p>
 					<aside class="notes">
-						projet client école
-						prototype application web ‘Rankscoring’ commandité par Frédéric Goldzak de Networklink.
-						un accélérateur de croissance pour les startups et PME et service d'ingénierie opérationnelle
+						, accompagnement levée de fonds, service d'ingénierie opérationnelle, mentoring...
 					</aside>
 				</section>
 				<section data-auto-animate>
@@ -53,7 +56,7 @@
 					</ul>
 					<aside class="notes">
 						Produit a destination des startups pour évaluer leur maturité avant de prétendre à une levée de fonds
-						2 questionnaires pour la start-up: général et scoring: 5 familles d'indicateurs / 9 questions par famille / 5 choix de réponses par question
+						Produit également à destination des investisseurs pour faciliter leur prise de décision
 					</aside>
 				</section>
 				<section>
@@ -116,6 +119,12 @@
 				</section>
 				<section>
 					<img class="r-stretch" src="img/db100.png">
+					<section>
+						Utlisation méthode Merise
+						1 MCD: regrouper les données dans des entités et établi des relations entre ces entités 
+						2. MLD : transformer les entités en table avec des champs et des clés primaires, défini les clés étrangères et défini les relations many to one et many to many 
+						création bdd sur workbench (table de joiture pour many to many)  
+					</section>
 				</section>
 				<section>
 					<p style="font-size:2rem; text-align: start; color: #ac109f">Post des réponses du questionnaire 'Général' dans la base de données</p>
@@ -156,7 +165,9 @@
 					</pre>
 					<aside class="notes">
 						Les réponses renvoyées par le questionnaire de profil sont stockées dans 3 tables différentes: startup_profile, position, activity_area.
-						Nous devons donc en premier lieu séparer les données reçues: 
+						Nous devons donc en premier lieu séparer les données reçues: destructuration de l'objet recu dans le corps de la requête pour recup generalForm et id startup 
+						puis destructuration du formulaire general pour récuperer les informations relatives aux tables position et activity area 
+						enfin suppression de ces 2 objets dans general form
 						+ Puis pour chaque table, envoyer les données correspondantes
 						La syntaxe INSERT INTO … SET est propre à MySQL et équivalente au standard SQL:  INSERT INTO … VALUES
 						L’instruction ON DUPLICATE KEY UPDATE est une fonctionnalité de MySQL qui permet de mettre à jour les données si un enregistrement existe déjà dans la table.
@@ -212,7 +223,10 @@
 						</li>
 					</ul>
 					<aside class="notes">
-						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables dans la base de données.
+						Afin d’établir un executive summary, il est nécessaire de récupérer les informations de profil de la start-up concernée réparties sur 3 tables 
+						dans la base de données.
+						+ Les tables ‘position’ et ‘activity_area’ contiennent tous les positionnements et secteurs d’activité possibles pour une startup. 
+						Chaque champ est associée à true ou false (0 ou 1 en SQL) selon si la startup a coché ou non la case dans le questionnaire (checkbox).
 					</aside>
 				</section>
 				<section data-auto-animate>
@@ -281,10 +295,8 @@
 					<aside class="notes">	
 						 + L’id de la startup concernée est passée en paramètre de l’URL, ses informations de profil sont récupérées dans la table ‘startup_profile’
 	
-						+ Les tables ‘position’ et ‘activity_area’ contiennent tous les positionnements et secteurs d’activité possibles pour une startup. 
-						Chaque champ est associée à true ou false (0 ou 1 en SQL) selon si la startup a coché ou non la case dans le questionnaire (checkbox).
-	
 						+ Nous ne souhaitons pas renvoyer les champs dont la valeur est false (0), nous les supprimons donc si tel est le cas
+						utilisation méthode Oject.keys pr renvoyer uniquement le nom du champ et suppression des champs = 0
 					</aside>
 				</section>
 				<section>
@@ -295,7 +307,8 @@
 					<img src="img/logo_wcs.png" width="300" >
 					<img style="margin: 30px;" width="400" src="img/logo_gris.png">
 					<aside class="notes">
-						Expérience trés enrichissante, dev fonctionnalités front en parrallele, pair programming 
+						1ere Expérience avec vrai client intense car 7 semaines, application méthodologie scrum, trés enrichissante: pair programming , 
+						dev fonctionnalités front en parrallele, 
 					</aside>
 				</section>
 				<section data-auto-animate>
